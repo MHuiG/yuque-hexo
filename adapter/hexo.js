@@ -29,7 +29,7 @@ function parseMatter(body) {
   body = entities.decode(body);
   try {
     // front matter信息的<br/>换成 \n
-    const regex = /(title:|layout:|tags:|date:|categories:|comments:){1}(\S|\s)+?---/gi;
+    const regex = /(title:|layout:|tags:|date:|categories:|comments:|top:|abstract:|message:|password:|sage:){1}(\S|\s)+?---/gi;
     body = body.replace(regex, a => a.replace(/(<br \/>|<br>|<br\/>)/gi, '\n'));
     const result = FrontMatter.parse(body);
     result.body = result._content;
@@ -60,13 +60,29 @@ module.exports = function(post) {
   const date = data.date || formatDate(created_at);
   const tags = data.tags || [];
   const categories = data.categories || [];
+  const comments=data.comments || false;
+  const top=data.top || false;
+  const sage=data.sage || false;
+  var abstract='Something was encrypted, please enter password to read.';
+  var message='Welcome to my blog, enter password to read.';
+  if(data.abstract){
+	  abstract=data.abstract;
+  };
+  if(data.message){
+	  message=data.message;
+  };
   const props = {
     title: title.replace(/"/g, ''), // 临时去掉标题中的引号，至少保证文章页面是正常可访问的
     //urlname,
     date,
-    ...data,
-    tags: formatTags(tags),
+	...data,
+	abstract,
+	message,
+	tags: formatTags(tags),
     categories: formatTags(categories),
+	comments,
+	top,
+	sage,
   };
   const text = ejs.render(template, {
     raw,
