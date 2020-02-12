@@ -29,7 +29,7 @@ function parseMatter(body) {
   body = entities.decode(body);
   try {
     // front matter信息的<br/>换成 \n
-    const regex = /(title:|layout:|tags:|date:|categories:){1}(\S|\s)+?---/gi;
+    const regex = /(title:|layout:|tags:|date:|categories:|comments:){1}(\S|\s)+?---/gi;
     body = body.replace(regex, a => a.replace(/(<br \/>|<br>|<br\/>)/gi, '\n'));
     const result = FrontMatter.parse(body);
     result.body = result._content;
@@ -62,7 +62,7 @@ module.exports = function(post) {
   const categories = data.categories || [];
   const props = {
     title: title.replace(/"/g, ''), // 临时去掉标题中的引号，至少保证文章页面是正常可访问的
-    urlname,
+    //urlname,
     date,
     ...data,
     tags: formatTags(tags),

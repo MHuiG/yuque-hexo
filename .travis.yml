@@ -5,10 +5,14 @@ node_js:
   - '10'
   - '12'
 before_install:
-  - npm i npminstall -g
+  - echo 0
+  #- npm i npminstall -g
 install:
-  - npminstall
+  - echo 0
+  #- npminstall
 script:
-  - npm run ci
+  - echo 0
+  #- npm run ci
 after_script:
-  - npminstall codecov && codecov
+  - echo 0
+  #- npminstall codecov && codecov
