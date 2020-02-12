@@ -66,7 +66,7 @@ module.exports = function(post) {
     date,
     ...data,
     tags: formatTags(tags),
-	categories: formatTags(categories),
+    categories: formatTags(categories),
   };
   const text = ejs.render(template, {
     raw,
