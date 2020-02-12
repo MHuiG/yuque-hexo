@@ -60,11 +60,14 @@ module.exports = function(post) {
   const date = data.date || formatDate(created_at);
   const tags = data.tags || [];
   const categories = data.categories || [];
-  const comments=data.comments || false;
   const top=data.top || false;
   const sage=data.sage || false;
   var abstract='Something was encrypted, please enter password to read.';
   var message='Welcome to my blog, enter password to read.';
+  var comments=true;
+  if(data.comments!=comments){
+	  comments=data.comments;
+  };
   if(data.abstract){
 	  abstract=data.abstract;
   };
