@@ -29,7 +29,7 @@ function parseMatter(body) {
   body = entities.decode(body);
   try {
     // front matter信息的<br/>换成 \n
-    const regex = /(title:|layout:|tags:|date:|categories:|comments:|top:|abstract:|message:|password:|sage:){1}(\S|\s)+?---/gi;
+    const regex = /(title:|layout:|tags:|date:|categories:|comments:|top:|abstract:|message:|password:|sage:|abbrlink:|){1}(\S|\s)+?---/gi;
     body = body.replace(regex, a => a.replace(/(<br \/>|<br>|<br\/>)/gi, '\n'));
     const result = FrontMatter.parse(body);
     result.body = result._content;
@@ -39,11 +39,13 @@ function parseMatter(body) {
     delete result._content;
     return result;
   } catch (error) {
-    return {
+	console.log(error);
+    /*return {
       body,
-    };
+    };*/
   }
 }
+
 
 /**
  * hexo 文章生产适配器
@@ -54,6 +56,7 @@ function parseMatter(body) {
 module.exports = function(post) {
   // matter 解析
   const parseRet = parseMatter(post.body);
+  //console.log(parseRet);
   const { body, ...data } = parseRet;
   const { title, slug: urlname, created_at } = post;
   const raw = formatRaw(body);
@@ -62,6 +65,7 @@ module.exports = function(post) {
   const categories = data.categories || [];
   const top=data.top || false;
   const sage=data.sage || false;
+  const abbrlink = data.abbrlink || '';
   var abstract='Something was encrypted, please enter password to read.';
   var message='Welcome to my blog, enter password to read.';
   var comments=true;
@@ -76,7 +80,6 @@ module.exports = function(post) {
   };
   const props = {
     title: title.replace(/"/g, ''), // 临时去掉标题中的引号，至少保证文章页面是正常可访问的
-    //urlname,
     date,
 	...data,
 	abstract,
@@ -86,6 +89,7 @@ module.exports = function(post) {
 	comments,
 	top,
 	sage,
+	abbrlink,
   };
   const text = ejs.render(template, {
     raw,
